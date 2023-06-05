@@ -12,7 +12,7 @@ dependencies:
     sdk: flutter
 
   fl_location: ^2.0.0+1
-  flutter_foreground_task: ^4.1.0
+  flutter_foreground_task: 6.0.0
   flutter_activity_recognition: ^2.0.0
 
 dev_dependencies:
