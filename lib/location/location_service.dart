@@ -13,7 +13,7 @@ abstract class LocationService {
   Stream<LocationData> getLocationStream({
     LocationAccuracyData accuracy = LocationAccuracyData.best,
     int interval = 5000,
-});
+  });
 
   Stream<LocationServicesStatusData> getLocationServicesStatusStream();
 
