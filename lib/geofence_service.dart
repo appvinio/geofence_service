@@ -27,6 +27,10 @@ export 'package:geofence_service/models/geofence_radius.dart';
 export 'package:geofence_service/models/geofence_radius_sort_type.dart';
 export 'package:geofence_service/models/geofence_service_options.dart';
 export 'package:geofence_service/models/geofence_status.dart';
+export 'package:geofence_service/location/model/location.dart';
+export 'package:geofence_service/location/model/location_accuracy.dart';
+export 'package:geofence_service/location/model/location_permission_data.dart';
+export 'package:geofence_service/location/model/location_services_status_data.dart';
 
 /// Callback function to handle geofence status changes.
 typedef GeofenceStatusChanged = Future<void> Function(Geofence geofence,
