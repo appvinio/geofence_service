@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:geofence_service/geofence_service.dart';
+import 'package:geofence_service/location/model/location.dart';
 
 void main() => runApp(const ExampleApp());
 
@@ -15,6 +16,7 @@ class ExampleApp extends StatefulWidget {
 class _ExampleAppState extends State<ExampleApp> {
   final _activityStreamController = StreamController<Activity>();
   final _geofenceStreamController = StreamController<Geofence>();
+  final _locationStreamController = StreamController<LocationData>();
 
   // Create a [GeofenceService] instance and set options.
   final _geofenceService = GeofenceService.instance.setup(
@@ -53,11 +55,8 @@ class _ExampleAppState extends State<ExampleApp> {
   ];
 
   // This function is to be called when the geofence status is changed.
-  Future<void> _onGeofenceStatusChanged(
-      Geofence geofence,
-      GeofenceRadius geofenceRadius,
-      GeofenceStatus geofenceStatus,
-      Location location) async {
+  Future<void> _onGeofenceStatusChanged(Geofence geofence, GeofenceRadius geofenceRadius,
+      GeofenceStatus geofenceStatus, LocationData location) async {
     print('geofence: ${geofence.toJson()}');
     print('geofenceRadius: ${geofenceRadius.toJson()}');
     print('geofenceStatus: ${geofenceStatus.toString()}');
@@ -72,8 +71,9 @@ class _ExampleAppState extends State<ExampleApp> {
   }
 
   // This function is to be called when the location has changed.
-  void _onLocationChanged(Location location) {
-    print('location: ${location.toJson()}');
+  void _onLocationChanged(LocationData location) {
+    _locationStreamController.sink.add(location);
+    print('location: $location');
   }
 
   // This function is to be called when a location services status change occurs
@@ -119,7 +119,8 @@ class _ExampleAppState extends State<ExampleApp> {
         androidNotificationOptions: AndroidNotificationOptions(
           channelId: 'geofence_service_notification_channel',
           channelName: 'Geofence Service Notification',
-          channelDescription: 'This notification appears when the geofence service is running in the background.',
+          channelDescription:
+              'This notification appears when the geofence service is running in the background.',
           channelImportance: NotificationChannelImportance.LOW,
           priority: NotificationPriority.LOW,
           isSticky: false,
@@ -151,13 +152,16 @@ class _ExampleAppState extends State<ExampleApp> {
       physics: const BouncingScrollPhysics(),
       padding: const EdgeInsets.all(8.0),
       children: [
+        Text("TEST"),
         _buildActivityMonitor(),
         const SizedBox(height: 20.0),
         _buildGeofenceMonitor(),
+        const SizedBox(height: 20.0),
+        _buildLocationMonitor(),
       ],
     );
   }
-  
+
   Widget _buildActivityMonitor() {
     return StreamBuilder<Activity>(
       stream: _activityStreamController.stream,
@@ -176,7 +180,7 @@ class _ExampleAppState extends State<ExampleApp> {
       },
     );
   }
-  
+
   Widget _buildGeofenceMonitor() {
     return StreamBuilder<Geofence>(
       stream: _geofenceStreamController.stream,
@@ -188,6 +192,25 @@ class _ExampleAppState extends State<ExampleApp> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('•\t\tGeofence (updated: $updatedDateTime)'),
+            const SizedBox(height: 10.0),
+            Text(content),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildLocationMonitor() {
+    return StreamBuilder<LocationData>(
+      stream: _locationStreamController.stream,
+      builder: (context, snapshot) {
+        final updatedDateTime = DateTime.now();
+        final content = snapshot.data?.toString() ?? '';
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('•\t\tLocation (location: $updatedDateTime)'),
             const SizedBox(height: 10.0),
             Text(content),
           ],
