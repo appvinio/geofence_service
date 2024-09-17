@@ -20,7 +20,6 @@ import 'package:geofence_service/models/geofence_service_options.dart';
 import 'package:geofence_service/models/geofence_status.dart';
 
 export 'package:flutter_activity_recognition/flutter_activity_recognition.dart';
-export 'package:flutter_foreground_task/flutter_foreground_task.dart';
 export 'package:geofence_service/errors/error_codes.dart';
 export 'package:geofence_service/models/geofence.dart';
 export 'package:geofence_service/models/geofence_radius.dart';
